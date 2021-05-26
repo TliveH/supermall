@@ -19,7 +19,7 @@ export default {
     banner:{
       type:Array,
       default(){
-        return []
+        return [];
       }
     }
   },
