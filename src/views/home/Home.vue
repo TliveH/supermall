@@ -44,7 +44,7 @@ export default {
 
 <style>
 .home-nav {
-  background-color: var(--color-tint);
+  background-color: pink;
   color: white;
 }
 </style>
