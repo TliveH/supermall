@@ -1,19 +1,28 @@
 <template>
   <div id="home">
+    <!-- 标题栏 -->
     <nav-bar class="home-nav">
       <div slot="center">购物街</div>
     </nav-bar>
+    <!-- tabBarControl -->
     <tab-control ref="tabControl1" @tabClick="tabClick" :titles="['流行','新款','精选']" class="tab-control"
                  v-show="isTabFixed"></tab-control>
-    <scroll class="content" ref="scroll" :probe-type="3" @scroll="contentScroll" :click="true" :pull-up-load="true"
+    <!-- BScroll滚动区域 -->
+    <scroll class="content" ref="scroll" :probe-type="3" @scroll="contentScroll" :click="true"
+            :pull-up-load="true"
             @pullingUp="loadMore">
-
+      <!-- 轮播图 -->
       <home-swiper :banner="banner" @swiperImageLoad="swiperImageLoad"></home-swiper>
+      <!-- 推荐分类 -->
       <RecommendView :recommend="recommend"></RecommendView>
+      <!-- 本周流行 -->
       <feature-view></feature-view>
+      <!-- tabBarControl -->
       <tab-control ref="tabControl2" @tabClick="tabClick" :titles="['流行','新款','精选']"></tab-control>
+      <!-- 商品展示 -->
       <goods-list :goods="showGoods"></goods-list>
     </scroll>
+    <!-- 回到顶部,监听组件的原生事件必须要用native修饰符变成原生组件 -->
     <back-top @click.native="backClick" v-show="isShowBackTop"></back-top>
   </div>
 </template>
@@ -29,9 +38,11 @@ import GoodsList from "../../components/content/goods/GoodsList";
 import Scroll from "../../components/common/scroll/Scroll";
 import BackTop from "../../components/content/backTop/BackTop";
 
+// import BScroll from 'better-scroll'
+
 import {getHomeMultidata} from "../../network/home";
 import {getHomeGoods} from "../../network/home";
-import {debounce} from "../../common/utils";
+import {itemListtenerMixin} from '../../common/mixin'
 
 
 export default {
@@ -46,6 +57,7 @@ export default {
     Scroll,
     BackTop
   },
+  mixins: [itemListtenerMixin],
   data() {
     return {
       banner: [],
@@ -57,14 +69,26 @@ export default {
       },
       currentType: 'pop',
       isShowBackTop: false,
+      //当前吸顶的位置
       tabOffsetTop: 0,
-      isTabFixed: false
+      isTabFixed: false,
+      saveY: 0,
     }
   },
   computed: {
     showGoods() {
       return this.goods[this.currentType].list
     }
+  },
+  activated() {
+    this.$refs.scroll.scrollTo(0, this.saveY, 0)
+    this.$refs.scroll.refresh()
+  },
+  deactivated() {
+    //获取Y值
+    this.saveY = this.$refs.scroll.getScrollY()
+    //取消全局事件的监听
+    this.$bus.$off('itemImageLoad', this.itemImgListene)
   },
   created() {
     //请求多条数据
@@ -73,13 +97,40 @@ export default {
     this.getHomeGoods('pop')
     this.getHomeGoods('new')
     this.getHomeGoods('sell')
+    //手动代码点击一次
+    // this.tabClick(0)
   },
   mounted() {
-    //监听item中图片加载完成
-    const refresh = debounce(this.$refs.scroll.refresh, 50)
-    this.$bus.$on('itemImageLoad', () => {
-      refresh()
-    })
+    // this.scroll = new BScroll(new BScroll(this.$refs.scroll))
+    // this.scroll = new BScroll(this.$refs.scroll, {
+    //   // 上拉加载
+    //   pullUpLoad: {
+    //     // 当上拉距离超过30px时触发 pullingUp 事件
+    //     threshold: -30
+    //   },
+    //   // 下拉刷新
+    //   pullDownRefresh: {
+    //     // 下拉距离超过30px触发pullingDown事件
+    //     threshold: 30,
+    //     // 回弹停留在距离顶部20px的位置
+    //     stop: 20
+    //   }
+    // })
+    // this.scroll.on('pullingUp', () => {
+    //   console.log('处理上拉加载操作')
+    //   setTimeout(() => {
+    //     // 事情做完，需要调用此方法告诉 better-scroll 数据已加载，否则上拉事件只会执行一次
+    //     this.scroll.finishPullUp()
+    //   }, 2000)
+    // })
+    // this.scroll.on('pullingDown', () => {
+    //   console.log('处理下拉刷新操作')
+    //   setTimeout(() => {
+    //     console.log('asfsaf')
+    //     // 事情做完，需要调用此方法告诉 better-scroll 数据已加载，否则下拉事件只会执行一次
+    //     this.scroll.finishPullDown()
+    //   }, 2000)
+    // })
   },
   methods: {
     /*
@@ -116,6 +167,9 @@ export default {
     loadMore() {
       this.getHomeGoods(this.currentType)
     },
+    // droprefresh(){
+    //   this.getHomeMultidata()
+    // },
     swiperImageLoad() {
       //获取tabControl的offsetTop
       //所有的组件都有一个属性$el:用于获取组件中的元素
@@ -139,7 +193,7 @@ export default {
         this.$refs.scroll.finishPullUp();
       })
     }
-  }
+  },
 }
 </script>
 

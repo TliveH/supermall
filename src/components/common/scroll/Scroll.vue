@@ -28,15 +28,21 @@ export default {
     pullUpLoad: {
       type: Boolean,
       default: false
-    }
+    },
+    // pullDownRefresh:{
+    //   type:Boolean,
+    //   default:false
+    // }
   },
   mounted() {
     //创建BScroll对象
     this.scroll = new BScroll(this.$refs.wrapper, {
-      // observeDOM: true,
+      observeDOM: true,
+      mouseWheel:true,
       click: this.click,
       probeType: this.probeType,
-      pullUpLoad: this.pullUpLoad
+      pullUpLoad: this.pullUpLoad,
+      // pullDownRefresh:this.pullDownRefresh
     })
     //监听滚动的位置
     this.scroll.on('scroll', (position) => {
@@ -46,16 +52,23 @@ export default {
     this.scroll.on('pullingUp', () => {
       this.$emit('pullingUp')
     })
+    //监听下拉事件
+    // this.scroll.on('pullingDown', () => {
+    //   this.$emit('pullingUp')
+    // })
   },
   methods: {
     scrollTo(x, y, time) {
-      this.scroll && this.scroll.scrollTo(x, y, time)
+      this.scroll && this.scroll.scrollTo && this.scroll.scrollTo(x, y, time)
     },
     finishPullUp() {
-      this.scroll.finishPullUp()
+      this.scroll && this.scroll.finishPullUp && this.scroll.finishPullUp()
     },
     refresh() {
-      this.scroll && this.scroll.refresh()
+      this.scroll && this.scroll.refresh && this.scroll.refresh()
+    },
+    getScrollY() {
+      return this.scroll ? this.scroll.y : 0
     }
   }
 }
