@@ -45,7 +45,7 @@ export default {
   padding: 0 10px;
   color: #999999;
   border-bottom: 5px solid #f2f5f8;
-  letter-spacing: 3px;
+  /*letter-spacing: 3px;*/
 }
 
 .info-title {

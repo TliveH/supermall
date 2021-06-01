@@ -31,4 +31,9 @@ export default {
   flex-wrap: wrap;
   justify-content: space-evenly;
 }
+.recommend {
+  font-size: 15px;
+  margin-top: 10px;
+  padding-left: 10px;
+}
 </style>

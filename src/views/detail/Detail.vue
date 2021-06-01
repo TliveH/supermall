@@ -1,23 +1,25 @@
 <template>
   <div id="detail">
     <!-- 导航栏 -->
-    <detail-nav-bar class="detail-nav"></detail-nav-bar>
-    <scroll class="content" ref="scroll" @scroll="contentScroll" :pull-up-load="true">
+    <detail-nav-bar class="detail-nav" ref="detailNav" @titleClick="titleClick"></detail-nav-bar>
+    <scroll class="content" ref="scroll" @scroll="contentScroll" :probe-type="3" :pull-up-load="true">
       <!-- 轮播图 -->
       <detail-swiper :top-images="topImage"></detail-swiper>
       <!-- 商品基本信息 -->
       <detail-base-info :goods="goods"></detail-base-info>
       <!-- 用户评论 -->
-      <detail-comment-info :comment-info="commentInfo"></detail-comment-info>
+      <detail-comment-info :comment-info="commentInfo" ref="comment"></detail-comment-info>
       <!-- 店铺信息 -->
       <detail-shop-info :shop="shop"></detail-shop-info>
       <!-- 商品详情信息 -->
-      <detail-images-info :detail-info="detailInfo" @imgLoad="imgLoad"></detail-images-info>
+      <detail-images-info :detail-info="detailInfo" @detailImageLoad="detailImageLoad"
+                          ref="images"></detail-images-info>
       <!-- 商品参数信息 -->
       <detail-param-info :param-info="paramInfo"></detail-param-info>
       <!-- 商品推荐 -->
-      <goods-list :goods="recommendList" :is-recommend="true"></goods-list>
+      <goods-list :goods="recommendList" :is-recommend="true" ref="recommend"></goods-list>
     </scroll>
+    <detail-bottom-bar @addCart="addToCart"></detail-bottom-bar>
     <back-top @click.native="backClick" v-show="isShowBackTop"></back-top>
   </div>
 </template>
@@ -31,12 +33,14 @@ import DetailShopInfo from './childComps/DetailShopInfo'
 import DetailImagesInfo from './childComps/DetailImagesInfo'
 import DetailParamInfo from './childComps/DetailParamInfo'
 import GoodsList from '../../components/content/goods/GoodsList'
+import DetailBottomBar from './childComps/DetailBottomBar'
 
 import Scroll from '../../components/common/scroll/Scroll'
 import BackTop from '../../components/content/backTop/BackTop'
 
 import {getDetail, getRecommend, Goods, Shop, GoodsParams} from '../../network/detail'
 import {itemListtenerMixin} from '../../common/mixin'
+import {debounce} from '../../common/utils'
 
 export default {
   name: "Detail",
@@ -49,6 +53,7 @@ export default {
     DetailImagesInfo,
     DetailParamInfo,
     GoodsList,
+    DetailBottomBar,
     Scroll,
     BackTop
   },
@@ -63,7 +68,10 @@ export default {
       paramInfo: {},
       commentInfo: {},
       recommendList: [],
+      themeTopYs: [],
+      getThemeTopY: null,
       isShowBackTop: false,
+      currentIndex: 0
     }
   },
   created() {
@@ -94,6 +102,15 @@ export default {
       // console.log(res);
       this.recommendList = res.data.list;
     })
+    //给getThemeTopY赋值
+    this.getThemeTopY = debounce(() => {
+      this.themeTopYs = []
+      this.themeTopYs.push(0)
+      this.themeTopYs.push(this.$refs.comment.$el.offsetTop)
+      this.themeTopYs.push(this.$refs.images.$el.offsetTop)
+      this.themeTopYs.push(this.$refs.recommend.$el.offsetTop)
+      this.themeTopYs.push(Number.MAX_VALUE)
+    }, 100)
   },
   mounted() {
   },
@@ -102,16 +119,45 @@ export default {
     this.$bus.$off('itemImageLoad', this.itemImgListene)
   },
   methods: {
-    imgLoad() {
+    detailImageLoad() {
       this.$refs.scroll.refresh()
+      this.getThemeTopY()
     },
-    backClick(){
+    backClick() {
       this.$refs.scroll.scrollTo(0, 0, 800)
     },
+    titleClick(index) {
+      this.$refs.scroll.scrollTo(0, -this.themeTopYs[index], 800)
+    },
     contentScroll(position) {
+      //获取Y值
+      const positionY = -position.y
+      //positionY与themeTopYs中的值进行对比
+      let length = this.themeTopYs.length
+      for (let i = 0; i < length - 1; i++) {
+        /*if (this.currentIndex != i && ((i < length - 1 && positionY > this.themeTopYs[i] && positionY < this.themeTopYs[i + 1]) || (i === length - 1 && positionY > this.themeTopYs[i]))) {
+          this.currentIndex = i;
+          this.$refs.detailNav.currentIndex=this.currentIndex
+        }*/
+        if (this.currentIndex != i && (positionY > this.themeTopYs[i] && positionY < this.themeTopYs[i + 1])) {
+          this.currentIndex = i;
+          this.$refs.detailNav.currentIndex = this.currentIndex
+        }
+      }
       //判断BackTop是否显示
       this.isShowBackTop = (-position.y) > 1000
     },
+    addToCart() {
+      //获取购物车显示的商品信息
+      const product = {}
+      product.image = this.topImage[0]
+      product.title = this.goodsInfo.title
+      product.desc = this.goodsInfo.desc
+      product.price = this.goodsInfo.lowNowPrice
+      product.iid = this.iid
+      //将商品添加到购物车
+      this.$store.commit('addCart', product)
+    }
   }
 }
 </script>
@@ -119,7 +165,7 @@ export default {
 <style scoped>
 #detail {
   position: relative;
-  z-index: 9;
+  z-index: 1;
   background-color: #fff;
   height: 100vh;
 }
@@ -131,6 +177,6 @@ export default {
 }
 
 .content {
-  height: calc(100% - 44px);
+  height: calc(100% - 93px);
 }
 </style>
