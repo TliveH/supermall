@@ -139,24 +139,27 @@ export default {
           this.currentIndex = i;
           this.$refs.detailNav.currentIndex=this.currentIndex
         }*/
-        if (this.currentIndex != i && (positionY > this.themeTopYs[i] && positionY < this.themeTopYs[i + 1])) {
+        // this.currentIndex !=i &&
+        if ((positionY > this.themeTopYs[i] && positionY < this.themeTopYs[i + 1])) {
           this.currentIndex = i;
           this.$refs.detailNav.currentIndex = this.currentIndex
         }
       }
       //判断BackTop是否显示
-      this.isShowBackTop = (-position.y) > 1000
+      this.isShowBackTop = (-position.y) > this.$refs.images.$el.offsetTop
     },
     addToCart() {
       //获取购物车显示的商品信息
       const product = {}
       product.image = this.topImage[0]
-      product.title = this.goodsInfo.title
-      product.desc = this.goodsInfo.desc
-      product.price = this.goodsInfo.lowNowPrice
+      product.title = this.goods.title
+      product.desc = this.goods.desc
+      product.price = this.goods.lowNowPrice
       product.iid = this.iid
       //将商品添加到购物车
-      this.$store.commit('addCart', product)
+      // this.$store.commit('addCart', product)
+      this.$store.dispatch('addCart',product)
+      // alert('添加购物车成功')
     }
   }
 }
