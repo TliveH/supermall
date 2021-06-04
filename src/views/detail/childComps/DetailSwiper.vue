@@ -30,6 +30,6 @@ export default {
 
 <style scoped>
 .detail-swiper{
-  height: 50vh;
+  height: 55vh;
 }
 </style>

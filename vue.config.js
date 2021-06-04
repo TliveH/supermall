@@ -14,11 +14,11 @@ module.exports = {
   },
   chainWebpack: config => {
     config.resolve.alias
-      .set("@", resolve("src"))
-      .set("assets", resolve("@/assets"))
-      .set("components", resolve("@/components"))
-      .set("network", resolve("@/network"))
-      .set("views", resolve("@/views"))
+      .set("@", resolve("./src"))
+      .set("assets", resolve("./src/assets"))
+      .set("components", resolve("./src/components"))
+      .set("network", resolve("./src/network"))
+      .set("views", resolve("./src/views"))
   }
 }
 

@@ -22,69 +22,81 @@
 </template>
 
 <script>
-export default {
-  name: "DetailBottomBar",
-  methods:{
-    addToCart(){
-      this.$emit('addCart')
+  export default {
+    name: "DetailBottomBar",
+    methods: {
+      addToCart() {
+        this.$emit('addCart')
+      }
     }
   }
-}
 </script>
 
 <style scoped>
-.bottom-bar {
-  height: 49px;
-  position: fixed;
-  background-color: #fff;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  text-align: center;
-}
+  .bottom-bar {
+    height: 49px;
+    position: fixed;
+    background-color: #fff;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    text-align: center;
+  }
 
-.bar-item {
-  flex: 1;
-  display: flex;
-}
+  .bar-item {
+    flex: 1;
+    display: flex;
+  }
 
-.bar-item > div {
-  flex: 1;
-}
+  .bar-item > div {
+    flex: 1;
+  }
 
-.bar-left .text {
-  font-size: 13px;
-}
+  .bar-left .text {
+    font-size: 13px;
+  }
 
-.bar-left .icon {
-  display: block;
-  width: 22px;
-  height: 22px;
-  margin: 10px auto 1px;
-  background: url("../../../assets/img/detail/detail_bottom.png") 0 0/100%;
-}
+  .bar-left .icon {
+    display: block;
+    width: 22px;
+    height: 22px;
+    margin: 10px auto 1px;
+    background: url("../../../assets/img/detail/detail_bottom.png") 0 0/100%;
+  }
 
-.bar-left .service {
-  background-position: 0 -54px;
-}
+  .bar-left .service {
+    background-position: 0 -54px;
+  }
 
-.bar-left .shop {
-  background-position: 0 -98px;
-}
+  .bar-left .shop {
+    background-position: 0 -98px;
+  }
 
-.bar-right {
-  font-size: 14px;
-  color: #fff;
-  line-height: 49px;
-}
+  .bar-right {
+    font-size: 14px;
+    color: #fff;
+    line-height: 49px;
+  }
 
-.bar-right .cart {
-  background-color: #fce939;
-  color: #333;
-}
+  .bar-right .cart {
+    background-color: #ff8198;
+    color: #eee;
+  }
 
-.bar-right .buy {
-  background-color: var(--color-tint);
-}
+  .bar-right .buy {
+    background-color: var(--color-high-text);
+  }
+
+  .cart {
+    height: 48px;
+    border-top-left-radius: 24px;
+    border-bottom-left-radius: 24px;
+  }
+
+  .buy {
+    height: 48px;
+    border-top-right-radius: 24px;
+    border-bottom-right-radius: 24px;
+  }
 </style>

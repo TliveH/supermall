@@ -15,12 +15,12 @@
 			path:String,
 			activeColor:{
 				type:String,
-				default:'blue'
+				default:'#ff5777'
 			}
 		},
 		data() {
 			return {
-				
+
 			}
 		},
 		computed:{
@@ -49,6 +49,6 @@
 	.tab-bar-item img {
 		height: 24px;
 		width: 24px;
-		margin-top: 2px;
+		margin-top: 5px;
 	}
 </style>
