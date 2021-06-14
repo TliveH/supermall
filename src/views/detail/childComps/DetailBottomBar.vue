@@ -16,7 +16,7 @@
     </div>
     <div class="bar-item bar-right">
       <div class="cart" @click="addToCart">加入购物车</div>
-      <div class="buy">购买</div>
+      <div class="buy" @click="buyClick">购买</div>
     </div>
   </div>
 </template>
@@ -27,6 +27,9 @@
     methods: {
       addToCart() {
         this.$emit('addCart')
+      },
+      buyClick(){
+        this.$router.replace('/cart')
       }
     }
   }
@@ -80,12 +83,12 @@
   }
 
   .bar-right .cart {
-    background-color: #ff8198;
-    color: #eee;
+    background-color: #FFECEF;
+    color: #ff4466;
   }
 
   .bar-right .buy {
-    background-color: var(--color-high-text);
+    background: linear-gradient(90deg, rgb(255, 87, 119), rgb(255, 70, 143));
   }
 
   .cart {

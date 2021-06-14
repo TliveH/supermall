@@ -14,7 +14,7 @@
   import Scroll from '../../../components/common/scroll/Scroll'
 
   export default {
-    name: "CategoryLeftBar",
+    name: "CategoryDetail",
     data() {
       return {
         currentIndex: 0

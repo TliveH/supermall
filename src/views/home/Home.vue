@@ -80,6 +80,18 @@
         return this.goods[this.currentType].list
       }
     },
+    created() {
+
+
+      //请求多条数据
+      this.getHomeMultidata()
+      //请求商品数据
+      this.getHomeGoods('pop')
+      this.getHomeGoods('new')
+      this.getHomeGoods('sell')
+      //手动代码点击一次
+      // this.tabClick(0)
+    },
     activated() {
       this.$refs.scroll.scrollTo(0, this.saveY, 0)
       this.$refs.scroll.refresh()
@@ -89,16 +101,6 @@
       this.saveY = this.$refs.scroll.getScrollY()
       //取消全局事件的监听
       this.$bus.$off('itemImageLoad', this.itemImgListene)
-    },
-    created() {
-      //请求多条数据
-      this.getHomeMultidata()
-      //请求商品数据
-      this.getHomeGoods('pop')
-      this.getHomeGoods('new')
-      this.getHomeGoods('sell')
-      //手动代码点击一次
-      // this.tabClick(0)
     },
     mounted() {
       // this.scroll = new BScroll(new BScroll(this.$refs.scroll))
@@ -193,7 +195,7 @@
           this.$refs.scroll.finishPullUp();
         })
       }
-    },
+    }
   }
 </script>
 

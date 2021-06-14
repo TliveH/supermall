@@ -41,8 +41,9 @@
     transform: translate(-50%, -50%);
     /*padding: 10px 12px;*/
     z-index: 999;
-    color: #F08080;
-    background-color: rgba(0, 0, 0, .5);
+    color: #eeeeee;
+    /*background-color: rgba(0, 0, 0, .5);*/
+    background: linear-gradient(90deg, rgba(255, 87, 119,.8), rgba(255, 70, 143,.8));
     letter-spacing: 1px;
   }
 </style>

@@ -52,10 +52,10 @@ export default {
     this.scroll.on('pullingUp', () => {
       this.$emit('pullingUp')
     })
-    //监听下拉事件
-    this.scroll.on('pullingDown', () => {
-      this.$emit('pullingDown')
-    })
+    // //监听下拉事件
+    // this.scroll.on('pullingDown', () => {
+    //   this.$emit('pullingDown')
+    // })
   },
   methods: {
     scrollTo(x, y, time) {

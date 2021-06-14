@@ -8,13 +8,8 @@
 </template>
 
 <script>
-  import Scroll from "../../../components/common/scroll/Scroll";
-
   export default {
     name: "Subcategory",
-    components: {
-      Scroll
-    },
     props: {
       CategoryList: {
         type: Array,

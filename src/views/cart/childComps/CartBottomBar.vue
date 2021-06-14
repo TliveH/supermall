@@ -106,8 +106,9 @@
 
   .calculate {
     width: 110px;
-    background-color: var(--color-tint);
-    color: #fff;
+    /*background-color: var(--color-tint);*/
+    background: linear-gradient(90deg, rgb(255, 87, 119), rgb(255, 70, 143));
+    color: #eeeeee;
     text-align: center;
     border-radius: 25px;
     margin: 0px 7px;

@@ -5,7 +5,10 @@ export default {
     payload.count++
   },
   addToCart(state, payload) {
-    payload.checked=true
+    payload.checked = true
     state.cartList.push(payload)
+  },
+  setLoading(state, bol) {
+    state.isLoading = bol;
   }
 }

@@ -4,5 +4,9 @@ export default {
   },
   cartList(state) {
     return state.cartList
+  },
+  // 映射请求加载
+  isLoading (state) {
+   return state.isLoading
   }
 }
